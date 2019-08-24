@@ -37,6 +37,26 @@ export class AuthService{
     }))
     }
 
+    autoLogin(){
+        let userData: {
+            email: string,
+            id: string,
+            _token: string,
+            _tokenExpirationDate: Date
+        } = JSON.parse(localStorage.getItem('userData'))
+        if(!userData){
+            return 
+        }
+        const loadedUser = new User(
+            userData.id, 
+            userData.email, 
+            userData._token, 
+            new Date(userData._tokenExpirationDate))
+            if(loadedUser.token){
+                this.user.next(loadedUser)
+            }
+    }
+
     login(email: string, password: string){
         return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDfnkwPr8l3dkycv7Xrr3r-sxv5WhVtxgo',
             {email: email,
@@ -66,6 +86,7 @@ export class AuthService{
             expirationDate
             )
             this.user.next(user)
+            localStorage.setItem('userData', JSON.stringify(user))
     }
 
     private handleError(errorRes: HttpErrorResponse ){
