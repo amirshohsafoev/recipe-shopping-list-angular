@@ -18,7 +18,7 @@ export class DataStorageService {
     const recipes = this.recipeService.getRecipes();
     this.http
       .put(
-        'https://ng-course-recipe-book-65f10.firebaseio.com/recipes.json',
+        'https://course-project-recipe-bo-42599.firebaseio.com/recipes.json',
         recipes
       )
       .subscribe(response => {
@@ -31,7 +31,7 @@ export class DataStorageService {
       take(1),
       exhaustMap(user => {
         return this.http.get<Recipe[]>(
-          'https://ng-course-recipe-book-65f10.firebaseio.com/recipes.json',
+          'https://course-project-recipe-bo-42599.firebaseio.com/recipes.json',
           {
             params: new HttpParams().set('auth', user.token)
           }
