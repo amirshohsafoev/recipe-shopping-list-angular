@@ -5,6 +5,8 @@ import {throwError, BehaviorSubject} from 'rxjs'
 
 import { User } from './user.model';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment'
+
 
 export interface AuthResponseData{
     kind: string,
@@ -25,7 +27,7 @@ export class AuthService{
     constructor(private http: HttpClient, private router: Router){}
 
     signUp(email: string, password: string){
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDfnkwPr8l3dkycv7Xrr3r-sxv5WhVtxgo',
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firebaseAPIKey,
         {email: email,
         password: password,
         returnSecureToken: true
@@ -61,7 +63,7 @@ export class AuthService{
     }
 
     login(email: string, password: string){
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDfnkwPr8l3dkycv7Xrr3r-sxv5WhVtxgo',
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firebaseAPIKey,
             {email: email,
             password: password,
             returnSecureToken: true
@@ -109,7 +111,7 @@ export class AuthService{
             if(!errorRes.error || !errorRes.error.error ){
                 return throwError(errorMessage)
             }
-            switch(errorRes.error.error.messsage){
+            switch(errorRes.error.error.message){
                 case 'INVALID_PASSWORD': errorMessage = 'The password you have entered is invalid';
                 break
                 case 'EMAIL_NOT_FOUND': errorMessage = 'Your email is not found in database';
